@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تدريب المحاضرة السابعة: أمان السوشيال ميديا | حراس المستقبل الرقمي</title>
+    <style>
+        :root {
+            --primary: #4361EE; --secondary: #3F8EFC; --accent: #F72585;
+            --success: #4CC9A6; --warning: #F9C74F; --danger: #EF476F;
+            --bg: #F8F9FA; --card: #FFFFFF; --text: #2B2D42; --text-light: #6C757D;
+            --radius: 16px; --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-main);
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px; margin: 0 auto; background: var(--card);
+            border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #5b21b6, #7c3aed);
+            color: white; padding: 24px; text-align: center; position: relative;
+        }
+        /* 🖼️ مكان اللوجو: حط كود Base64 الخاص بشعار الأكاديمية هنا في src */
+        .logo-box {
+            width: 90px; height: 90px; background: rgba(255,255,255,0.25);
+            border-radius: 50%; margin: 0 auto 12px; display: flex;
+            align-items: center; justify-content: center; font-size: 36px;
+            border: 3px solid rgba(255,255,255,0.4); cursor: pointer; transition: 0.3s;
+        }
+        .logo-box:hover { transform: scale(1.05); background: rgba(255,255,255,0.35); }
+        .logo-box img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: none; }
+        h1 { font-size: 26px; margin-bottom: 6px; }
+        .subtitle { opacity: 0.95; font-size: 15px; }
+
+        .tabs {
+            display: flex; flex-wrap: wrap; gap: 8px; padding: 16px;
+            background: #f3e8ff; border-bottom: 1px solid #d8b4fe;
+        }
+        .tab-btn {
+            flex: 1; min-width: 140px; padding: 12px; border: none; background: white;
+            border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.25s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .tab-btn:hover { transform: translateY(-2px); }
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--accent), #ff6b9d); color: white;
+            box-shadow: 0 4px 12px rgba(247,37,133,0.3);
+        }
+
+        .content-area { padding: 24px; min-height: 450px; }
+        .section { display: none; animation: slideIn 0.4s ease; }
+        .section.active { display: block; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 { margin-bottom: 16px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .desc { color: var(--text-light); margin-bottom: 20px; line-height: 1.6; }
+
+        .card {
+            background: #faf5ff; border: 2px solid #d8b4fe;
+            border-radius: 12px; padding: 18px; margin-bottom: 16px; transition: 0.2s;
+        }
+        .btn {
+            padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600;
+            cursor: pointer; transition: 0.2s;
+        }
+        .btn-primary { background: linear-gradient(135deg, #5b21b6, #7c3aed); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(91,33,182,0.4); }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-outline:hover { background: #f3e8ff; }
+
+        .feedback {
+            padding: 12px; border-radius: 8px; margin-top: 12px; font-weight: 500; display: none;
+        }
+        .feedback.success { background: #d4edda; color: #155724; display: block; }
+        .feedback.warning { background: #fff3cd; color: #856404; display: block; }
+        .feedback.error { background: #f8d7da; color: #721c24; display: block; }
+        .feedback.info { background: #e0e7ff; color: #1e40af; display: block; border-right: 4px solid #5b21b6; }
+
+        .quiz-options { display: grid; gap: 10px; margin-top: 12px; }
+        .quiz-option {
+            padding: 14px; background: white; border: 2px solid #e2e8f0;
+            border-radius: 10px; cursor: pointer; transition: 0.2s;
+        }
+        .quiz-option:hover { border-color: var(--primary); background: #f8fafc; }
+        .quiz-option.selected { border-color: var(--primary); background: #eef2ff; }
+        .quiz-option.correct { border-color: var(--success); background: #d4edda; }
+        .quiz-option.wrong { border-color: var(--danger); background: #f8d7da; }
+
+        .quick-btns {
+            display: flex; gap: 20px; justify-content: center; margin-top: 24px;
+        }
+        .quick-btn {
+            flex: 1; padding: 20px; border: none; border-radius: 16px; font-size: 20px;
+            font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .quick-btn.yes { background: var(--success); color: white; }
+        .quick-btn.no { background: var(--danger); color: white; }
+        .quick-btn:hover { transform: scale(1.02); opacity: 0.9; }
+
+        .build-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+        .build-item {
+            padding: 16px; background: white; border-radius: 12px;
+            border: 2px dashed #cbd5e1; text-align: center; cursor: pointer; transition: 0.2s;
+        }
+        .build-item:hover { border-style: solid; border-color: var(--warning); }
+        .build-item.active {
+            background: #fffbeb; border-color: var(--warning); transform: translateY(-3px);
+        }
+        .build-icon { font-size: 2.5em; margin-bottom: 8px; }
+
+        .stats {
+            display: flex; justify-content: space-around; background: #f3e8ff;
+            padding: 16px; border-radius: 12px; margin-top: 20px;
+        }
+        .stat-box { text-align: center; }
+        .stat-box .num { font-size: 28px; font-weight: bold; color: #5b21b6; }
+        .stat-box .label { font-size: 13px; color: var(--text-light); }
+
+        .checklist { list-style: none; padding: 0; }
+        .checklist li {
+            padding: 12px; background: white; border-radius: 10px; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 12px; font-size: 1.1em;
+            border: 2px solid #e2e8f0; transition: 0.2s; cursor: pointer;
+        }
+        .checklist li.checked { border-color: var(--success); background: #f0fdf4; }
+        .checklist li::before { content: '📱'; font-size: 1.3em; }
+        .checklist li.checked::before { content: '✅'; color: var(--success); }
+
+        .tip-card {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-right: 4px solid var(--warning);
+            padding: 14px; border-radius: 10px; margin: 12px 0; font-size: 1.05em;
+        }
+        .tip-card strong { color: #92400e; }
+
+        .content-list { display: grid; gap: 10px; margin-top: 12px; }
+        .content-item {
+            padding: 14px; background: white; border: 2px solid #e2e8f0;
+            border-radius: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+        }
+        .content-item:hover { border-color: #5b21b6; }
+        .content-item.smart { border-color: var(--success); background: #d4edda; }
+        .content-item.unwise { border-color: var(--danger); background: #f8d7da; }
+
+        @media (max-width: 768px) {
+            .tabs { flex-direction: column; } .tab-btn { min-width: 100%; }
+            .quick-btns { flex-direction: column; gap: 12px; } 
+            .build-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <!-- 🖼️ مكان اللوجو: حط كود Base64 الخاص بشعار الأكاديمية هنا في src -->
+    <div class="logo-box" onclick="document.getElementById('logo-img').style.display='block'; this.style.background='none'">
+      <span>☀️</span>
+      <img id="logo-img" src="" alt="شعار الأكاديمية">
+    </div>
+    <h1> تدريب المحاضرة السابعة</h1>
+    <p class="subtitle">أمان السوشيال ميديا: المشاركة الذكية والخصوصية | آدم (13) & محمد (11)</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="detector">🔍 كاشف المحتوى</button>
+    <button class="tab-btn" data-tab="privacy">🔒 فحص الإعدادات</button>
+    <button class="tab-btn" data-tab="quiz">📝 اختبار السوشيال (15 سؤال)</button>
+    <button class="tab-btn" data-tab="quick">⚡ رد الفعل السريع</button>
+    <button class="tab-btn" data-tab="build">🛡️ ابنِ حسابك الذكي</button>
+  </nav>
+
+  <main class="content-area">
+    
+    <!-- 🔍 القسم 1: كاشف المحتوى الذكي -->
+    <section id="detector" class="section active">
+      <h2>🔍 كاشف المحتوى: ذكي أم غير ذكي؟</h2>
+      <p class="desc">اضغط على كل منشور أو موقف لتحديد إذا كان مشاركة ذكية ولا لأ:</p>
+      
+      <div class="card">
+        <div class="content-list" id="content-list">
+          <div class="content-item" onclick="checkContent(this, true)" data-tip="التحقق من المصدر قبل النشر يوقف انتشار الإشاعات ويبني مصداقيتك">✅ مشاركة خبر بعد التأكد من مصدره الرسمي</div>
+          <div class="content-item" onclick="checkContent(this, false)" data-tip="السخرية أو التنمر يترك أثرًا سلبيًا وقد يتحول لمشكلة قانونية أو نفسية">❌ نشر ميم مضحك عن زميل في الفصل بدون إذنه</div>
+          <div class="content-item" onclick="checkContent(this, true)" data-tip="مشاركة إنجازاتك أو مشاريعك تبني بصمة رقمية إيجابية ومهنية">✅ نشر شهادة أو مشروع مدرسي أنجزته</div>
+          <div class="content-item" onclick="checkContent(this, false)" data-tip="نشر الروتين اليومي أو الموقع يسهل التتبع ويعرّض أمانك للخطر">❌ نشر صور يومية مع تفعيل الموقع الجغرافي الدقيق</div>
+        </div>
+        <div id="content-feedback" class="feedback"></div>
+        <div id="content-tip" class="tip-card" style="display:none;"></div>
+      </div>
+
+      <div class="card" style="background: #fef3c7; border-color: var(--warning);">
+        <h3>💡 قاعدة المشاركة الذكية:</h3>
+        <p>قبل الضغطة، اسأل: <strong>هل حقيقي؟ هل هيفرحني بعد 10 سنين؟ هل هيفرح اللي شافه؟</strong></p>
+      </div>
+    </section>
+
+    <!-- 🔒 القسم 2: فحص إعدادات الحساب -->
+    <section id="privacy" class="section">
+      <h2>🔒 فحص إعدادات الخصوصية والأمان</h2>
+      <p class="desc">اختار الإعدادات اللي تخليك "أنت المتحكم" في حسابك:</p>
+      
+      <div class="card">
+        <ul class="checklist" id="privacy-list">
+          <li onclick="togglePrivacy(this)" data-correct="true" data-tip="الحساب الخاص يخليك تختار مين يشوف محتواك بدقة">🔐 ضبط الحساب على "أصدقاء فقط" أو "مقربون"</li>
+          <li onclick="togglePrivacy(this)" data-correct="true" data-tip="إيقاف الوسوم التلقائية يحميك من الظهور في أماكن لم تختارها">📍 تعطيل إضافة الموقع تلقائيًا للمنشورات</li>
+          <li onclick="togglePrivacy(this)" data-correct="false" data-tip="⚠️ القبول العشوائي يفتح باب المتطفلين وسرقة المحتوى">🤝 قبول طلبات المتابعة من حسابات مجهولة</li>
+          <li onclick="togglePrivacy(this)" data-correct="true" data-tip="تنبيه التأكيد يكسر التسرع ويطبق قاعدة الـ 10 سنين">⏳ تفعيل سؤال "هل أنت متأكد؟" قبل الحذف أو النشر العام</li>
+          <li onclick="togglePrivacy(this)" data-correct="true" data-tip="مراجعة المتابعين دوريًا تنظف جمهورك من الحسابات الوهمية">🔍 مراجعة قائمة المتابعين وحذف الحسابات المشبوهة</li>
+          <li onclick="togglePrivacy(this)" data-correct="false" data-tip="⚠️ مشاركة الأكواد أو كلمات السر تفتح حسابك بالكامل للغرباء">🔑 مشاركة أكواد التحقق أو كلمة السر مع الأصدقاء</li>
+        </ul>
+        <div id="privacy-feedback" class="feedback"></div>
+        <div id="privacy-tip" class="tip-card" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- 📝 القسم 3: اختبار السوشيال ميديا -->
+    <section id="quiz" class="section">
+      <h2>📝 اختبار أمان السوشيال ميديا (15 سؤال)</h2>
+      <p class="desc">اختبر فهمك. <strong>الإجابات الصحيحة تظهر في أماكن عشوائية كل مرة!</strong></p>
+      
+      <div id="quiz-container">
+        <div class="card" id="quiz-card">
+          <h3 id="q-text">جاري تحميل السؤال...</h3>
+          <div class="quiz-options" id="q-options"></div>
+        </div>
+        <div class="feedback" id="q-feedback"></div>
+        <div id="q-explanation" class="feedback info" style="display:none;"></div>
+        <div style="display:flex; justify-content:space-between; margin-top:16px;">
+          <button class="btn btn-outline" id="q-prev" disabled>السابق</button>
+          <span id="q-counter">سؤال 1 / 15</span>
+          <button class="btn btn-primary" id="q-next" disabled>التالي</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⚡ القسم 4: رد الفعل السريع -->
+    <section id="quick" class="section">
+      <h2>⚡ رد الفعل السريع (ذكي ✅ / غير ذكي ⛔)</h2>
+      <p class="desc">ستظهر جملة عن استخدامك للسوشيال ميديا. <strong>الإجابات عشوائية وغير متوقعة!</strong> اختر فورًا.</p>
+      
+      <div class="card" style="text-align:center; padding:30px; font-size:20px; font-weight:bold; background:#fff; border-radius:16px;" id="quick-q">
+        اضغط "ابدأ" لتفعيل الوضع السريع
+      </div>
+      
+      <div class="quick-btns">
+        <button class="quick-btn yes" onclick="answerQuick(true)">✅ ذكي / أوافق</button>
+        <button class="quick-btn no" onclick="answerQuick(false)">⛔ غير ذكي / أرفض</button>
+      </div>
+      <div class="feedback" id="quick-feedback"></div>
+      <div id="quick-explanation" class="feedback info" style="display:none;"></div>
+      <div class="stats">
+        <div class="stat-box"><div class="num" id="quick-correct">0</div><div class="label">إجابات صحيحة</div></div>
+        <div class="stat-box"><div class="num" id="quick-speed">0s</div><div class="label">متوسط السرعة</div></div>
+        <button class="btn btn-primary" onclick="startQuick()" style="padding:10px 24px;">🔄 إعادة بدء</button>
+      </div>
+    </section>
+
+    <!-- 🛡️ القسم 5: ابنِ حسابك الذكي -->
+    <section id="build" class="section">
+      <h2>🛡️ ابنِ حسابك الرقمي الذكي</h2>
+      <p class="desc">اختر 5 عناصر عشان تحول حسابك لـ "مساحة آمنة ومبدعة":</p>
+      
+      <div class="build-grid" id="build-items">
+        <div class="build-item" data-id="1" data-tip="التوثيق بخطوتين يمنع الدخول حتى لو كلمة السر تسربت">🔐 تفعيل المصادقة بخطوتين (2FA)</div>
+        <div class="build-item" data-id="2" data-tip="قائمة الأصدقاء المقربين تتحكم في مين يشوف الصور الشخصية">👥 استخدام قائمة 'الأصدقاء المقربين'</div>
+        <div class="build-item" data-id="3" data-tip="الإبلاغ والحجب يوقف المتنمر ويحمي المجتمع الرقمي">🛑 تعلّم استخدام أدوات Report & Block</div>
+        <div class="build-item" data-id="4" data-tip="المشاركة الواعية تبني سمعة رقمية تفيدك في الدراسة والعمل">📤 مشاركة المحتوى التعليمي أو الإبداعي</div>
+        <div class="build-item" data-id="5" data-tip="الصحة الرقمية مهمة. خذ راحة عشان ترجع بتركيز وإبداع">⏳ تحديد وقت يومي للتصفح (Digital Wellbeing)</div>
+        <div class="build-item" data-id="6" data-tip="التحقق من الروابط قبل الضغط يمنع التصفح الاحتيالي">🔍 فحص الروابط قبل المشاركة أو النقر</div>
+        <div class="build-item" data-id="7" data-tip="عدم نشر الروتين اليومي يمنع التتبع الجغرافي">📍 إخفاء تفاصيل الموقع والروتين اليومي</div>
+        <div class="build-item" data-id="8" data-tip="قاعدة التعاطف الرقمي: متكتبش حاجة متقدرش تقولهوش قدام الناس">💬 تطبيق التعاطف قبل أي تعليق أو رد</div>
+      </div>
+      
+      <div id="build-tip" class="tip-card" style="margin-top:15px; display:none;"></div>
+      
+      <div id="build-result" style="margin-top:20px; text-align:center; display:none;">
+        <div class="card" style="background:linear-gradient(135deg, #5b21b6, #7c3aed); color:#fff; font-size:20px; font-weight:bold; padding:20px; border-radius:16px;">
+          🎉 أحسنت! حسابك دلوقتي ذكي، آمن، ومبدع<br>
+          <span style="font-size:14px; font-weight:normal;">أنت الآن مواطن رقمي واعٍ معتمد!</span>
+        </div>
+        <button class="btn btn-primary" style="margin-top:12px;" onclick="alert('تم حفظ التقدم! استعد للمحاضرة الثامنة')">💾 حفظ التقدم</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // 📌 إدارة التنقل بين الأقسام
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // 🔍 1. كاشف المحتوى
+  function checkContent(element, isSmart) {
+    const tip = element.dataset.tip;
+    element.classList.toggle(isSmart ? 'smart' : 'unwise');
+    
+    const tipBox = document.getElementById('content-tip');
+    tipBox.textContent = `💡 ${tip}`;
+    tipBox.style.display = 'block';
+    
+    const allItems = document.querySelectorAll('#content-list .content-item');
+    const checkedCount = Array.from(allItems).filter(c => c.classList.contains('smart') || c.classList.contains('unwise')).length;
+    const smartCount = Array.from(allItems).filter(c => c.classList.contains('smart')).length;
+    
+    const feedback = document.getElementById('content-feedback');
+    if (checkedCount < 4) {
+      feedback.className = 'feedback warning';
+      feedback.textContent = `💡 اختار كل العناصر (${checkedCount}/4)`;
+    } else {
+      if (smartCount === 2) {
+        feedback.className = 'feedback success';
+        feedback.textContent = `🎉 ممتاز! فرّقت صح بين 2 مشاركة ذكية و2 غير ذكية!`;
+      } else {
+        feedback.className = 'feedback error';
+        feedback.textContent = `⚠️ فيه خطأ. تذكّر قواعد الـ 3 أسئلة قبل النشر.`;
+      }
+    }
+  }
+
+  // 🔒 2. فحص الإعدادات
+  function togglePrivacy(element) {
+    const tip = element.dataset.tip;
+    const isCorrect = element.dataset.correct === 'true';
+    element.classList.toggle('checked');
+    
+    const tipBox = document.getElementById('privacy-tip');
+    if (element.classList.contains('checked')) {
+      tipBox.textContent = `💡 ${tip}`;
+      tipBox.style.display = 'block';
+    }
+    
+    const allSettings = document.querySelectorAll('#privacy-list li');
+    const checkedCorrect = Array.from(allSettings).filter(s => s.classList.contains('checked') && s.dataset.correct === 'true').length;
+    const checkedWrong = Array.from(allSettings).filter(s => s.classList.contains('checked') && s.dataset.correct === 'false').length;
+    
+    const feedback = document.getElementById('privacy-feedback');
+    if (checkedWrong > 0) {
+      feedback.className = 'feedback error';
+      feedback.textContent = `⚠️ اخترت ${checkedWrong} إعداد بيفتح حسابك للغرباء أو يضر خصوصيتك.`;
+    } else if (checkedCorrect >= 4) {
+      feedback.className = 'feedback success';
+      feedback.textContent = `🎉 ممتاز! اخترت ${checkedCorrect} إعداد ذكي. أنت المتحكم الآن!`;
+    } else {
+      feedback.className = 'feedback warning';
+      feedback.textContent = `💡 حاول تكمل: اختر الإعدادات الأربعة اللي تحميك.`;
+    }
+  }
+
+  // 📝 3. بنك الأسئلة (15 سؤال) - خلط الخيارات عشوائيًا
+  const quizData = [
+    { q: "ما هي أهم قاعدة قبل مشاركة أي منشور؟", opts: ["الضغط بسرعة عشان مايتأخرش", "التحقق من المصدر، التفكير في المستقبل، واحترام الغير", "مشاركة أي حاجة عشان التفاعل يزيد", "سؤال الذكاء الاصطناعي فقط"], ans: 1, explanation: "قواعد المشاركة الذكية الثلاثة توقف التسرع وتمنع الندم الرقمي." },
+    { q: "ليه تعتبر السوشيال ميديا 'ساحة رقمية'؟", opts: ["عشان فيها ألعاب بس", "عشان فيها ناس بيشاركو آراء ومحتوى ويتفاعلوا بحرية", "عشان الحكومة بتراقبها", "عشان فيها إعلانات كتير"], ans: 1, explanation: "السوشيال ميديا مساحة تفاعلية عامة، والتصرف فيها بيأثر على سمعتك وبيئتك الرقمية." },
+    { q: "إيه أفضل رد لو شفت تنمر رقمي على زميل؟", opts: ["أرد عليه بنفس الطريقة", "أمسح الشاشة، أحجز التعليق، وأبلغ عنه، وأقول لكبير", "أشاركه عشان أضحك", "أتجاهل الموضوع وأكمل تصفح"], ans: 1, explanation: "التنمر بيحتاج تدخل مسؤول. التوثيق والإبلاغ يوقف الضرر ويحمي الضحية." },
+    { q: "هل من الذكي قبول طلبات صداقة من حسابات جديدة تمامًا؟", opts: ["أيوه عشان أوسع دائرتي", "لا، لازم أتأكد من هويتهم أو أرفض للخصوصية", "مش مهم طالما الحساب فيه صور", "أقبلهم وأقفل الإشعارات"], ans: 1, explanation: "كل متابع جديد بيشوف محتواك. الفلترة الذكية جزء أساسي من الأمان الرقمي." },
+    { q: "إيه فائدة قائمة 'الأصدقاء المقربين' (Close Friends)؟", opts: ["عشان شكلها حلو", "عشان تشارك اللحظات الشخصية مع دائرة ضيقة موثوقة فقط", "عشان تزيد المتابعين", "عشان تخفي الحساب من الأهل"], ans: 1, explanation: "بتخليك تتحكم في الجمهور بدقة، وبتقلل خطر تسرب المحتوى الشخصي." },
+    { q: "ليه مشاركة الموقع الجغرافي (Location Tagging) تلقائيًا خطر؟", opts: ["عشان بتستهلك إنترنت", "عشان بتكشف أماكن وجودك وروتينك اليومي لأي حد يشوف المنشور", "عشان بتبطئ التطبيق", "عشان بتغير ألوان الصور"], ans: 1, explanation: "التتبع الجغرافي بيستخدم للتجسس أو السرقة. عطله أو خليه يدويًا فقط عند الحاجة." },
+    { q: "إزاي تتعامل مع إشاعة أو خبر مش مؤكد على السوشيال ميديا؟", opts: ["أنشره عشان الناس تعرف", "أتحقق من مصادر رسمية قبل المشاركة أو أتجاهله", "أرد على الناشر بغضب", "أحفظه عشان أستغله بعدين"], ans: 1, explanation: "المشاركة المسؤولة توقف تضليل الجمهور. التحقق بيحمي مصداقيتك ومجتمعك." },
+    { q: "هل قاعدة الـ 10 سنين تنطبق على السوشيال ميديا؟", opts: ["لا، المنشورات بتتمسح بسرعة", "أيوه، لأن السيرفرات واللّقطات بتخلي الأثر يدوم سنين", "بس للإنستجرام", "مش مهم"], ans: 1, explanation: "الحذف من عندك مش حذف من الشبكة. التفكير المستقبلي بيحمي بصمتك الرقمية." },
+    { q: "إيه أهم ميزة في زر Report (الإبلاغ)؟", opts: ["عشان يزعج الناشر", "عشان يبلّغ خوارزميات المنصة عن محتوى مخالف أو ضار", "عشان يحذف الحساب فورًا", "عشان يزيد متابعينك"], ans: 1, explanation: "الإبلاغ أداة مجتمعية. استخدامه الصحيح بيخلي المنصة أنظف وأأمن للجميع." },
+    { q: "ليه تعتبر 'الصحة الرقمية' جزء من أمان السوشيال ميديا؟", opts: ["عشان البطارية تتحمل", "عشان الإفراط في التصفح بيسبب إدمان رقمي ويقلل الوعي النقدي", "عشان التطبيقات بتطلبها", "مش فرق"], ans: 1, explanation: "التوازن الرقمي بيحافظ على تركيزك، ويقلل الاندفاع العاطفي، ويزيد قراراتك وعيًا." },
+    { q: "هل من الآمن استخدام نفس كلمة سر السوشيال ميديا للبريد الإلكتروني؟", opts: ["أيوه عشان أوفر وقت", "لا، تسريب حساب واحد هيسرب الباقي (Credential Stuffing)", "مش مهم لو الحساب مش مهم", "أستخدمها وأغيرها كل سنة"], ans: 1, explanation: "التكرار بيضاعف الخطر. كلمة سر فريدة لكل منصة بتعزل الاختراق لو حصل." },
+    { q: "إزاي تعرف إن الحساب اللي بيفوتلك 'مش حقيقي' (Bot/Fake)؟", opts: ["متابعين كتير جدًا", "بدون صورة شخصية، منشورات متكررة، وتفاعل آلي", "بيستخدم إيموجي كتير", "بيطلب صداقة بسرعة"], ans: 1, explanation: "الحسابات الوهمية بتفتقر للهوية البشرية الحقيقية. الحذر بيحميك من التصيد أو التلاعب." },
+    { q: "ليه مهمة مراجعة 'قائمة التطبيقات المرتبطة' بحسابك؟", opts: ["عشان شكلها تقني", "عشان تطبيقات قديمة أو غير موثوقة ممكن تسحب بياناتك أو تنشر باسمك", "عشان تزيد مساحة التخزين", "مش لازم"], ans: 1, explanation: "الأذونات القديمة ثغرة صامتة. المراجعة الدورية بتقطع الاتصال بخدمات مش ضرورية." },
+    { q: "إيه معنى 'التعاطف الرقمي' (Digital Empathy)؟", opts: ["البكاء على المنشورات الحزينة", "التفكير في مشاعر الآخر قبل النشر أو التعليق، وعدم كتابة ما متقدرش تقوله قدام الناس", "إعطاء لايكات لكل الناس", "حذف الأصدقاء اللي مش متفقين معاك"], ans: 1, explanation: "التعاطف الرقمي بيحول السوشيال ميديا لمجتمع داعم بدل مساحة سامة." },
+    { q: "ما هو التصرف الأذكى لو حسابك اتعمله اختراق؟", opts: ["أعمل حساب جديد فورًا وأنسى القديم", "أغير كلمة السر، أفحص الأجهزة المسجلة، أبلغ المنصة، وأنبّه أصدقائي", "أحذف التطبيق من هاتفي", "أتصل بالشرطة فورًا"], ans: 1, explanation: "الاستجابة المنظمة بتقلل الضرر، بتحمي الأصدقاء من الروابط المشبوهة، وبتستعيد السيطرة." }
+  ];
+
+  let currentQ = 0, shuffledQ = [], score = 0;
+  
+  function shuffleOptionsWithAnswer(question) {
+    let options = question.opts.map((opt, idx) => ({ text: opt, isCorrect: idx === question.ans }));
+    for (let i = options.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [options[i], options[j]] = [options[j], options[i]];
+    }
+    return { shuffledOpts: options.map(opt => opt.text), correctIndex: options.findIndex(opt => opt.isCorrect) };
+  }
+  
+  function initQuiz() {
+    shuffledQ = [...quizData].sort(() => Math.random() - 0.5);
+    currentQ = 0; score = 0; renderQ();
+  }
+  function renderQ() {
+    if(currentQ >= shuffledQ.length) {
+      document.getElementById('quiz-card').innerHTML = `<h3>🎉 انتهى الاختبار! نتيجتك: ${score}/15</h3><p>أداء رائع! استمروا في التعلم.</p>`;
+      document.getElementById('q-counter').textContent = ''; return;
+    }
+    const originalQ = shuffledQ[currentQ];
+    const { shuffledOpts, correctIndex } = shuffleOptionsWithAnswer(originalQ);
+    
+    document.getElementById('q-text').textContent = originalQ.q;
+    const optsDiv = document.getElementById('q-options'); optsDiv.innerHTML = '';
+    shuffledOpts.forEach((opt, i) => {
+      const btn = document.createElement('div'); btn.className = 'quiz-option';
+      btn.textContent = opt; btn.onclick = () => selectAnswer(i, correctIndex, btn, originalQ.explanation); optsDiv.appendChild(btn);
+    });
+    document.getElementById('q-counter').textContent = `سؤال ${currentQ + 1} / ${shuffledQ.length}`;
+    document.getElementById('q-prev').disabled = currentQ === 0;
+    document.getElementById('q-next').disabled = true;
+    document.getElementById('q-feedback').style.display = 'none';
+    document.getElementById('q-explanation').style.display = 'none';
+  }
+  function selectAnswer(selected, correct, btn, explanation) {
+    document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected', 'correct', 'wrong'));
+    btn.classList.add('selected'); const fb = document.getElementById('q-feedback'); const exp = document.getElementById('q-explanation');
+    if(selected === correct) {
+      btn.classList.add('correct'); fb.className = 'feedback success'; fb.textContent = '✅ إجابة صحيحة! أحسنت.';
+      exp.textContent = `💡 ${explanation}`; score++;
+    } else {
+      btn.classList.add('wrong'); document.querySelectorAll('.quiz-option')[correct].classList.add('correct');
+      fb.className = 'feedback error'; fb.textContent = '❌ إجابة خاطئة. الإجابة الصحيحة هي المظللة بالأخضر.';
+      exp.textContent = `💡 ${explanation}`;
+    }
+    fb.style.display = 'block'; exp.style.display = 'block';
+    document.getElementById('q-next').disabled = false;
+  }
+  document.getElementById('q-prev').onclick = () => { if(currentQ > 0) { currentQ--; renderQ(); } };
+  document.getElementById('q-next').onclick = () => { currentQ++; renderQ(); };
+  initQuiz();
+
+  // ⚡ 4. رد الفعل السريع - إجابات عشوائية غير متوقعة
+  const quickBaseData = [
+    { q: "أرد على متنمر بنفس طريقته عشان يسيبني.", correctAns: false, explanation: "الرد بيغذي التنمر ويديك فرصة للاستغلال. الحل: احجز، أبلغ، قول لكبير." },
+    { q: "أفعل قائمة 'الأصدقاء المقربين' للصور الشخصية.", correctAns: true, explanation: "بيخليك المتحكم في الجمهور ويقلل تسرب المحتوى لعيون غريبة." },
+    { q: "أنشر إجازتي وأنا لسه مسافر عشان أوريكم المكان.", correctAns: false, explanation: "النشر الفوري بيكشف إن بيتك فاضي. انشر الصور بعد ما ترجع بسلامة." },
+    { q: "أتحقق من خبر صادم من موقع رسمي قبل ما أشاركه.", correctAns: true, explanation: "التحقق بيوقف التضليل وبيحمي مصداقيتك الرقمية." },
+    { q: "أقبل طلب صداقة من حساب جديد عشان أكون لطيف.", correctAns: false, explanation: "اللطف الرقمي مش في القبول العشوائي، ده في الحذر الذكي واحترام الخصوصية." },
+    { q: "أحدد ساعة يوميًا للتصفح وأقفل الإشعارات بعدها.", correctAns: true, explanation: "الصحة الرقمية بتحسن تركيزك وبتقلل الاندفاع العاطفي أثناء التصفح." },
+    { q: "أشارك كود التحقق اللي جالي في رسالة عشان أصاحب حد.", correctAns: false, explanation: "أكواد التحقق = مفاتيح حسابك. مشاركتها = تسليم الحساب بالكامل." },
+    { q: "أستخدم زرار 'Block' لو حساب بيضايقني أو بيتحرش بيا.", correctAns: true, explanation: "الحجز حقك الرقمي. بيوقف التفاعل الضار فورًا وبيحمي مساحتك." },
+    { q: "أكتب تعليق ساخر على فيديو زميل عشان أضحك الناس.", correctAns: false, explanation: "الضحك على حساب الغير بيترك بصمة سلبية وبيتحول لتنمر رقمي." },
+    { q: "أراجع التطبيقات اللي ليها صلاحية الدخول لحسابي كل 3 شهور.", correctAns: true, explanation: "الأذونات القديمة ثغرة صامتة. المراجعة الدورية بتقطع التسريب المحتمل." }
+  ];
+  
+  let qIdx = 0, qCorrect = 0, qStartTime = 0, qTotalTime = 0, qCount = 0;
+  let quickQuestions = [];
+  
+  function prepareQuickQuestions() { quickQuestions = [...quickBaseData].sort(() => Math.random() - 0.5); }
+  
+  function startQuick() {
+    qIdx = 0; qCorrect = 0; qTotalTime = 0; qCount = 0;
+    document.getElementById('quick-correct').textContent = '0';
+    document.getElementById('quick-speed').textContent = '0s';
+    prepareQuickQuestions(); loadQuickQ();
+  }
+  function loadQuickQ() {
+    if(qIdx >= quickQuestions.length) {
+      document.getElementById('quick-q').textContent = `🏁 انتهى! إجابات صحيحة: ${qCorrect}/${quickQuestions.length}`;
+      document.getElementById('quick-feedback').style.display = 'none';
+      document.getElementById('quick-explanation').style.display = 'none';
+      return;
+    }
+    document.getElementById('quick-q').textContent = quickQuestions[qIdx].q;
+    document.getElementById('quick-feedback').style.display = 'none';
+    document.getElementById('quick-explanation').style.display = 'none';
+    qStartTime = Date.now();
+  }
+  function answerQuick(userAns) {
+    const q = quickQuestions[qIdx]; const real = q.correctAns;
+    const fb = document.getElementById('quick-feedback'); const exp = document.getElementById('quick-explanation');
+    const time = (Date.now() - qStartTime) / 1000; qTotalTime += time; qCount++;
+    if(userAns === real) { qCorrect++; fb.className = 'feedback success'; fb.textContent = `✅ قرار ذكي وأمن! (${time.toFixed(1)}ث)`; exp.textContent = `💡 ${q.explanation}`; }
+    else { fb.className = 'feedback error'; fb.textContent = `⚠️ سلوك رقمي محفوف بالمخاطر. القرار الصحيح: ${real ? 'ذكي/موافق' : 'غير ذكي/رفض'}`; exp.textContent = `💡 ${q.explanation}`; }
+    fb.style.display = 'block'; exp.style.display = 'block';
+    document.getElementById('quick-correct').textContent = qCorrect;
+    document.getElementById('quick-speed').textContent = `${(qTotalTime/qCount).toFixed(1)}s`;
+    setTimeout(() => { qIdx++; loadQuickQ(); }, 2000);
+  }
+  startQuick();
+
+  // 🛡️ 5. ابنِ حسابك الذكي
+  const buildItems = document.querySelectorAll('.build-item');
+  let activeBuild = new Set();
+  const requiredForSecure = 5;
+  buildItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const id = item.dataset.id; const tip = item.dataset.tip; const tipBox = document.getElementById('build-tip');
+      if(activeBuild.has(id)) { activeBuild.delete(id); item.classList.remove('active'); tipBox.style.display = 'none'; }
+      else { activeBuild.add(id); item.classList.add('active'); tipBox.textContent = `💡 ${tip}`; tipBox.style.display = 'block'; }
+      document.getElementById('build-result').style.display = activeBuild.size >= requiredForSecure ? 'block' : 'none';
+    });
+  });
+</script>
+
+</body>
+</html>
